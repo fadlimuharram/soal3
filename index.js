@@ -19,12 +19,8 @@ app.use((req,res,next)=>{
     next();
 });
 
-app.get('/tes',(req,res)=>{
-    res.send('hallo');
-});
 
-app.get('/api/mahasiswa',queries.getallMahasiswa);
-app.post('/api/mahasiswa',queries.createMahasiswa);
+app.get('/api/services',queries.getallServices);
 
 
 app.get('/vrptest',(req,res)=>{
