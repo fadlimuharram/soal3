@@ -1,13 +1,19 @@
-const promise = require('bluebird');
+const { Client } = require('pg');
 
-const options = {
-    promiseLib: promise
-}
+const config = {
+    host: 'ec2-54-235-94-36.compute-1.amazonaws.com',
+    user: 'pexwzhhgukajpd',
+    database: 'd803igvrlbdt97',
+    password: '678984085fc17de3aa6864be9e69b65842b247a55237ff3456addfafffad3b10',
+    port: 5432,
+    ssl: true
+};
 
-const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://pexwzhhgukajpd:678984085fc17de3aa6864be9e69b65842b247a55237ff3456addfafffad3b10@ec2-54-235-94-36.compute-1.amazonaws.com:5432/d803igvrlbdt97';
-const db = pgp(connectionString);
+const db = new Client(config);
+db.connect();
+
 
 module.exports = {
     db
 }
+

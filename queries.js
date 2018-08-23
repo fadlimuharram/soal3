@@ -1,27 +1,40 @@
 const {db} = require('./koneksi');
 
 var $getallMahasiswa = (request,response)=>{
-    db.any('SELECT * FROM mahasiswa').then((data)=>{
-        response.status(200).json({
-            status:'success',
-            data:data,
-            message:'retrived all mahasiswa'
-        });
+    db.query('SELECT * FROM mahasiswa',(err,res)=>{
+        
+        if (err) {
+            console.log(err.stack)
+        } else {
+            response.status(200).json({
+                status:'success',
+                data:res.rows[0],
+                message:'retrived all mahasiswa'
+            });
+        }
     });
 }
 
 var $createMahasiswa = (request,response,next)=>{
-    
-    db.none('INSERT INTO mahasiswa(nama,npm,email) VALUES(${nama},${npm},${email})',request.body).then(()=>{
-        response.status(200).json({
-            status:'success',
-            message:'inserted mahasiswa'
-        });
-    }).catch((err)=>{
-        return next(err);
-    })
-}
+    const querynya = {
+        text: 'INSERT INTO mahasiswa(nama,npm,email) VALUES($1,$2,$3)',
+        values: [request.body.nama, request.body.npm, request.body.email],
+    }
+    db.query(querynya,(err,res)=>{
+        
+        if (err) {
+            console.log(err.stack)
+        } else {
+            response.status(200).json({
+                status:'success',
+                message:'inserted mahasiswa'
+            });
+        }
+    });
 
+    
+}
+/*
 var $editMahasiswa = (request,response,next)=>{
     db.none('UPDATE mahasiswa SET nama=$1, npm=$2, email=$3 WHERE id=$4',
         [request.body.nama, request.body.npm, request.body.email, request.body.id]
@@ -45,12 +58,11 @@ var $deleteMahasiswa = (request,response,next)=>{
     }).catch((err)=>{
         return next(err);
     })
-}
+}*/
 
 
 module.exports = {
     getallMahasiswa:$getallMahasiswa,
-    createMahasiswa:$createMahasiswa,
-    editMahasiswa:$editMahasiswa,
-    deleteMahasiswa:$deleteMahasiswa
+    createMahasiswa:$createMahasiswa
+
 }
